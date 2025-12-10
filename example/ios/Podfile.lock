@@ -25,11 +25,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/integration_test/ios"
 
 SPEC CHECKSUMS:
-  bluetooth_print_plus: bd85efc3308fc07c5fd203f753ac4df538e6806c
+  bluetooth_print_plus: 1621ee5330f4e911ccbbaf1709e613d282f0100d
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   GSDK: 65d54603da7bece31b433c0f34f8a52c4431dd08
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
 
-PODFILE CHECKSUM: f97d31b856d7c8b5903099a967b41cf099152e4b
+PODFILE CHECKSUM: fcd2cf6e6ed7b03d6c0ba22e8c29b85e705f97f2
 
 COCOAPODS: 1.16.2
