@@ -53,6 +53,7 @@ Bluetooth Print Plus is a Bluetooth plugin used to print thermal printers in [Fl
 | connect    | :white_check_mark: | :white_check_mark: | Establishes a connection to the device.                |
 | disconnect | :white_check_mark: | :white_check_mark: | Cancels an active or pending connection to the device. |
 | state      | :white_check_mark: | :white_check_mark: | Stream of state changes for the Bluetooth Device.      |
+| MFI (iOS)  |        :x:         | :white_check_mark: | iOS MFI (Made for iPhone) for TSC printers via ExternalAccessory. |
 
 ## Usage
 
@@ -90,7 +91,7 @@ In the **android/app/src/main/AndroidManifest.xml** let’s add:
 
 #### **IOS**
 
-In the **ios/Runner/Info.plist** let’s add:
+In the **ios/Runner/Info.plist** let's add:
 
 ```dart
 <key>NSBluetoothAlwaysUsageDescription</key>
@@ -99,10 +100,50 @@ In the **ios/Runner/Info.plist** let’s add:
 <string>Need BLE permission</string>
 ```
 
+#### **iOS MFI (Made for iPhone) Support for TSC Printers**
+
+For TSC printers using MFI protocol (like TSC TDM-30), add the following to **ios/Runner/Info.plist**:
+
+```xml
+<key>UISupportedExternalAccessoryProtocols</key>
+<array>
+    <string>com.issc.datapath</string>
+</array>
+```
+
+**Important**: Users must pair the MFI printer in iOS Settings > Bluetooth BEFORE using the app. The app cannot scan for MFI devices - it can only list already-paired accessories.
+
 ### import
 
 ```dart
 import 'package:bluetooth_print_plus/bluetooth_print_plus.dart';
+```
+
+### iOS MFI Usage
+
+For TSC printers with MFI support, use `TscMfiChannel`:
+
+```dart
+import 'package:bluetooth_print_plus/bluetooth_print_plus.dart';
+
+// List already-paired MFI accessories
+final accessories = await TscMfiChannel.listAccessories();
+if (accessories.isNotEmpty) {
+  print('Found MFI printer: ${accessories.first['name']}');
+}
+
+// Print with TSC commands (optimal method - single native call)
+final buffer = StringBuffer();
+buffer.write('SIZE 72 mm, 25 mm\r\n');
+buffer.write('GAP 0 mm, 0 mm\r\n');
+buffer.write('DENSITY 12\r\n');
+buffer.write('SPEED 4\r\n');
+buffer.write('CLS\r\n');
+buffer.write('TEXT 30,30,"2",0,2,2,"Test"\r\n');
+buffer.write('PRINT 1\r\n');
+
+// Execute complete print job in one call (best performance)
+await TscMfiChannel.executePrintJob(buffer.toString());
 ```
 
 ### BluetoothPrintPlus useful property

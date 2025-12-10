@@ -6,6 +6,12 @@
 #import "CpclCommandPlugin.h"
 #import "EscCommandPlugin.h"
 
+#if __has_include(<bluetooth_print_plus/bluetooth_print_plus-Swift.h>)
+#import <bluetooth_print_plus/bluetooth_print_plus-Swift.h>
+#else
+#import "bluetooth_print_plus-Swift.h"
+#endif
+
 #define WeakSelf(type) __weak typeof(type) weak##type = type
 
 typedef NS_ENUM(NSInteger, BPPState) {
@@ -58,7 +64,10 @@ typedef NS_ENUM(NSInteger, BPPState) {
     FlutterMethodChannel *escChannel = [FlutterMethodChannel methodChannelWithName:@"bluetooth_print_plus_esc" binaryMessenger:[registrar messenger]];
     EscCommandPlugin *esc = [EscCommandPlugin new];
     [registrar addMethodCallDelegate:esc channel:escChannel];
-    
+
+    // Register TSC MFI plugin for iOS
+    [TscMfiPlugin registerWithRegistrar:registrar];
+
     instance.stateID = BlueOff;
     [Manager didUpdateState:^(NSInteger state) {
         dispatch_async(dispatch_get_main_queue(), ^{

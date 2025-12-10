@@ -1,0 +1,4 @@
+framework module tscswift {
+  header "tscswift-Swift.h"
+  requires objc
+}

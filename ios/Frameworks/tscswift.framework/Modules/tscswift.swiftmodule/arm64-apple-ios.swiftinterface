@@ -1,0 +1,178 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)
+// swift-module-flags: -target arm64-apple-ios9.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name tscswift
+import CoreBluetooth
+import ExternalAccessory
+import Foundation
+import Swift
+import UIKit
+@objc @_inheritsConvenienceInitializers public class BLE : ObjectiveC.NSObject, UIKit.UITextFieldDelegate, UIKit.UITextViewDelegate, CoreBluetooth.CBCentralManagerDelegate, CoreBluetooth.CBPeripheralDelegate, Foundation.StreamDelegate {
+  @objc override dynamic public init()
+  @objc public func centralManagerDidUpdateState(_ central: CoreBluetooth.CBCentralManager)
+  @objc public func centralManager(_ central: CoreBluetooth.CBCentralManager, didDiscover peripheral: CoreBluetooth.CBPeripheral, advertisementData: [Swift.String : Any], rssi RSSI: Foundation.NSNumber)
+  @objc public func centralManager(_ central: CoreBluetooth.CBCentralManager, didConnect peripheral: CoreBluetooth.CBPeripheral)
+  @objc public func centralManager(_ central: CoreBluetooth.CBCentralManager, didDisconnectPeripheral peripheral: CoreBluetooth.CBPeripheral, error: Swift.Error?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverServices error: Swift.Error?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverCharacteristicsFor service: CoreBluetooth.CBService, error: Swift.Error?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateValueFor characteristic: CoreBluetooth.CBCharacteristic, error: Swift.Error?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didWriteValueFor characteristic: CoreBluetooth.CBCharacteristic, error: Swift.Error?)
+  public func openport_ble(_ peripheral: CoreBluetooth.CBPeripheral) -> ObjectiveC.NSInteger
+  public func openport_ble(_ peripheral: CoreBluetooth.CBPeripheral, delay: Swift.Double) -> ObjectiveC.NSInteger
+  public func searchBLEDevice(_ Seconds: Swift.Double) -> Foundation.NSMutableArray
+  public func closeport() -> Swift.Int
+  public func closeport(_ delay: Swift.Double) -> Swift.Int
+  public func sendcommand(_ command: Swift.String) -> Swift.Int
+  public func sendcommand(_ command: Swift.String, delay: Swift.Double) -> Swift.Int
+  public func sendcommand_utf8(_ command: Swift.String) -> Swift.Int
+  public func sendcommand_utf8(_ command: Swift.String, delay: Swift.Double) -> Swift.Int
+  public func sendcommand_big5(_ command: Swift.String) -> Swift.Int
+  public func sendcommand_big5(_ command: Swift.String, delay: Swift.Double) -> Swift.Int
+  public func sendcommand_gb2312(_ command: Swift.String) -> Swift.Int
+  public func sendcommand_gb2312(_ command: Swift.String, delay: Swift.Double) -> Swift.Int
+  public func sendCommandWithData(_ commandData: Foundation.Data) -> Swift.Int
+  public func sendCommandWithData(_ commandData: Foundation.Data, delay: Swift.Double) -> Swift.Int
+  public func setup(_ width: Swift.String, height: Swift.String, speed: Swift.String, density: Swift.String, sensor: Swift.String, vertical: Swift.String, offset: Swift.String) -> Swift.Int
+  public func clearBuffer() -> Swift.Int
+  public func barcode(_ x: Swift.String, y: Swift.String, barcodeType: Swift.String, height: Swift.String, readable: Swift.String, rotation: Swift.String, narrow: Swift.String, wide: Swift.String, code: Swift.String) -> Swift.Int
+  public func printerfont(_ x: Swift.String, y: Swift.String, fontName: Swift.String, rotation: Swift.String, magnificationRateX: Swift.String, magnificationRateY: Swift.String, content: Swift.String) -> Swift.Int
+  public func printerfont_GB2312(_ x: Swift.String, y: Swift.String, fontName: Swift.String, rotation: Swift.String, magnificationRateX: Swift.String, magnificationRateY: Swift.String, content: Swift.String) -> Swift.Int
+  public func printerfont_Big5(_ x: Swift.String, y: Swift.String, fontName: Swift.String, rotation: Swift.String, magnificationRateX: Swift.String, magnificationRateY: Swift.String, content: Swift.String) -> Swift.Int
+  public func formfeed() -> Swift.Int
+  public func nobackfeed() -> Swift.Int
+  public func printlabel(_ quantity: ObjectiveC.NSInteger, copies: ObjectiveC.NSInteger) -> Swift.Int
+  public func printer_codepage() -> Swift.String
+  public func printer_codepage(_ delay: Swift.Double) -> Swift.String
+  public func printer_mileage() -> Swift.String
+  public func printer_mileage(_ delay: Swift.Double) -> Swift.String
+  public func printer_memory() -> Swift.String
+  public func printer_memory(_ delay: Swift.Double) -> Swift.String
+  public func printer_files() -> Swift.String
+  public func printer_files(_ delay: Swift.Double) -> Swift.String
+  public func printer_modelname() -> Swift.String
+  public func printer_modelname(_ delay: Swift.Double) -> Swift.String
+  public func printer_serialnumber() -> Swift.String
+  public func printer_serialnumber(_ delay: Swift.Double) -> Swift.String
+  public func printer_status() -> Swift.String
+  public func printer_status(_ delay: Swift.Double) -> Swift.String
+  public func printer_status_byte() -> Swift.Int
+  public func printer_status_byte(_ delay: Swift.Double) -> Swift.Int
+  public func stream_Status() -> Swift.Int
+  public func stream_Status(_times: Swift.UInt) -> Swift.Int
+  public func smartbattery_status(index: Swift.Int) -> Swift.String
+  public func fnFindFontWithName(_ givenFamilyName: Swift.String, bold: Swift.Bool, italic: Swift.Bool) -> Swift.String
+  public func fnBitsFromImage(_ image: UIKit.UIImage) -> Foundation.Data
+  public func windowsfont(_ x: Swift.Int, y: Swift.Int, height: Swift.Int, rotation: Swift.Int, style: Swift.Int, withUnderline: Swift.Int, fontName: Swift.String, content: Swift.String) -> Swift.Int
+  public func downloadpcx(_ srcPath: Swift.String, name: Swift.String) -> Swift.Int
+  public func sendBinaryData(_ data: Foundation.Data) -> Swift.Int
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class Bluetooth : ObjectiveC.NSObject, ExternalAccessory.EAAccessoryDelegate, Foundation.StreamDelegate {
+  public var accessory: ExternalAccessory.EAAccessory?
+  public var session: ExternalAccessory.EASession?
+  public var accessories: [ExternalAccessory.EAAccessory]
+  open var thread: Foundation.Thread
+  public func openport_mfi() -> Swift.Int
+  @objc public func openport_thread()
+  public func closeport() -> Swift.Int
+  public func closeport(_ delay: Swift.Double) -> Swift.Int
+  public func sendcommand(_ command: Swift.String) -> Swift.Int
+  public func sendcommand(_ command: Swift.String, delay: Swift.Double) -> Swift.Int
+  public func sendcommand_utf8(_ command: Swift.String) -> Swift.Int
+  public func sendcommand_utf8(_ command: Swift.String, delay: Swift.Double) -> Swift.Int
+  public func sendcommand_big5(_ command: Swift.String) -> Swift.Int
+  public func sendcommand_big5(_ command: Swift.String, delay: Swift.Double) -> Swift.Int
+  public func sendcommand_gb2312(_ command: Swift.String) -> Swift.Int
+  public func sendcommand_gb2312(_ command: Swift.String, delay: Swift.Double) -> Swift.Int
+  public func sendCommandWithData(_ commandData: Foundation.Data) -> Swift.Int
+  public func sendCommandWithData(_ commandData: Foundation.Data, delay: Swift.Double) -> Swift.Int
+  public func setup(_ width: Swift.String, height: Swift.String, speed: Swift.String, density: Swift.String, sensor: Swift.String, vertical: Swift.String, offset: Swift.String) -> Swift.Int
+  public func clearBuffer() -> Swift.Int
+  public func barcode(_ x: Swift.String, y: Swift.String, barcodeType: Swift.String, height: Swift.String, readable: Swift.String, rotation: Swift.String, narrow: Swift.String, wide: Swift.String, code: Swift.String) -> Swift.Int
+  public func printerfont(_ x: Swift.String, y: Swift.String, fontName: Swift.String, rotation: Swift.String, magnificationRateX: Swift.String, magnificationRateY: Swift.String, content: Swift.String) -> Swift.Int
+  public func printerfont_GB2312(_ x: Swift.String, y: Swift.String, fontName: Swift.String, rotation: Swift.String, magnificationRateX: Swift.String, magnificationRateY: Swift.String, content: Swift.String) -> Swift.Int
+  public func printerfont_Big5(_ x: Swift.String, y: Swift.String, fontName: Swift.String, rotation: Swift.String, magnificationRateX: Swift.String, magnificationRateY: Swift.String, content: Swift.String) -> Swift.Int
+  public func formfeed() -> Swift.Int
+  public func nobackfeed() -> Swift.Int
+  public func printlabel(_ quantity: ObjectiveC.NSInteger, copies: ObjectiveC.NSInteger) -> Swift.Int
+  public func sendcommand_getstring(_ message: Swift.String) -> Swift.String
+  public func sendcommand_getstring(_ message: Swift.String, delay: Swift.Double) -> Swift.String
+  public func printer_codepage() -> Swift.String
+  public func printer_codepage(_ delay: Swift.Double) -> Swift.String
+  public func printer_mileage() -> Swift.String
+  public func printer_mileage(_ delay: Swift.Double) -> Swift.String
+  public func printer_memory() -> Swift.String
+  public func printer_memory(_ delay: Swift.Double) -> Swift.String
+  public func printer_files() -> Swift.String
+  public func printer_files(_ delay: Swift.Double) -> Swift.String
+  public func printer_modelname() -> Swift.String
+  public func printer_modelname(_ delay: Swift.Double) -> Swift.String
+  public func printer_serialnumber() -> Swift.String
+  public func printer_serialnumber(_ delay: Swift.Double) -> Swift.String
+  public func printer_status() -> Swift.String
+  public func printer_status(_ delay: Swift.Double) -> Swift.String
+  public func printer_status_byte() -> Swift.Int
+  public func printer_status_byte(_ delay: Swift.Double) -> Swift.Int
+  public func stream_Status() -> Swift.Int
+  public func stream_Status(_times: Swift.UInt) -> Swift.Int
+  @objc public func stream(_ aStream: Foundation.Stream, handle eventCode: Foundation.Stream.Event)
+  public func smartbattery_status(index: Swift.Int) -> Swift.String
+  public func fnFindFontWithName(_ givenFamilyName: Swift.String, bold: Swift.Bool, italic: Swift.Bool) -> Swift.String
+  public func fnBitsFromImage(_ image: UIKit.UIImage) -> Foundation.Data
+  public func windowsfont(_ x: Swift.Int, y: Swift.Int, height: Swift.Int, rotation: Swift.Int, style: Swift.Int, withUnderline: Swift.Int, fontName: Swift.String, content: Swift.String) -> Swift.Int
+  public func downloadpcx(_ srcPath: Swift.String, name: Swift.String) -> Swift.Int
+  public func sendBinaryData(_ data: Foundation.Data) -> Swift.Int
+  @objc deinit
+  @objc override dynamic public init()
+}
+@objc @_inheritsConvenienceInitializers public class WiFi : ObjectiveC.NSObject, Foundation.StreamDelegate {
+  @objc public func stream(_ aStream: Foundation.Stream, handle aStreamEvent: Foundation.Stream.Event)
+  public func openport(_ ipaddress: CoreFoundation.CFString, portnumber: Swift.UInt32) -> Swift.Int
+  public func sendcommand(_ message: Swift.String) -> Swift.Int
+  public func sendcommand(_ message: Swift.String, timeout: Swift.Double) -> Swift.Int
+  public func sendcommand_utf8(_ message: Swift.String) -> Swift.Int
+  public func sendcommand_utf8(_ message: Swift.String, timeout: Swift.Double) -> Swift.Int
+  public func sendcommand_big5(_ message: Swift.String) -> Swift.Int
+  public func sendcommand_big5(_ message: Swift.String, timeout: Swift.Double) -> Swift.Int
+  public func sendcommand_gb2312(_ message: Swift.String) -> Swift.Int
+  public func sendcommand_gb2312(_ message: Swift.String, timeout: Swift.Double) -> Swift.Int
+  public func sendcommandWithData(_ binary_array: Foundation.Data) -> Swift.Int
+  public func sendcommandWithData(_ binary_array: Foundation.Data, delay: Swift.Double) -> Swift.Int
+  public func closeport(_ timeout: Swift.Double) -> Swift.Int
+  public func setup(_ width: Swift.String, height: Swift.String, speed: Swift.String, density: Swift.String, sensor: Swift.String, vertical: Swift.String, offset: Swift.String) -> Swift.Int
+  public func clearBuffer() -> Swift.Int
+  public func barcode(_ x: Swift.String, y: Swift.String, barcodeType: Swift.String, height: Swift.String, readable: Swift.String, rotation: Swift.String, narrow: Swift.String, wide: Swift.String, code: Swift.String) -> Swift.Int
+  public func printerfont(_ x: Swift.String, y: Swift.String, fontName: Swift.String, rotation: Swift.String, magnificationRateX: Swift.String, magnificationRateY: Swift.String, content: Swift.String) -> Swift.Int
+  public func printerfont_GB2312(_ x: Swift.String, y: Swift.String, fontName: Swift.String, rotation: Swift.String, magnificationRateX: Swift.String, magnificationRateY: Swift.String, content: Swift.String) -> Swift.Int
+  public func printerfont_Big5(_ x: Swift.String, y: Swift.String, fontName: Swift.String, rotation: Swift.String, magnificationRateX: Swift.String, magnificationRateY: Swift.String, content: Swift.String) -> Swift.Int
+  public func formfeed() -> Swift.Int
+  public func nobackfeed() -> Swift.Int
+  public func printlabel(_ quantity: ObjectiveC.NSInteger, copies: ObjectiveC.NSInteger) -> Swift.Int
+  public func sendcommand_getstring(_ message: Swift.String) -> Swift.String
+  public func sendcommand_getstring(_ message: Swift.String, delay: Swift.Double) -> Swift.String
+  public func printer_codepage() -> Swift.String
+  public func printer_codepage(delay: Swift.Double) -> Swift.String
+  public func printer_mileage() -> Swift.String
+  public func printer_mileage(delay: Swift.Double) -> Swift.String
+  public func printer_memory() -> Swift.String
+  public func printer_memory(delay: Swift.Double) -> Swift.String
+  public func printer_files() -> Swift.String
+  public func printer_files(delay: Swift.Double) -> Swift.String
+  public func printer_modelname() -> Swift.String
+  public func printer_modelname(delay: Swift.Double) -> Swift.String
+  public func printer_serialnumber() -> Swift.String
+  public func printer_serialnumber(delay: Swift.Double) -> Swift.String
+  public func printer_status() -> Swift.String
+  public func printer_status(delay: Swift.Double) -> Swift.String
+  public func printer_status_byte() -> Swift.Int
+  public func printer_status_byte(delay: Swift.Double) -> Swift.Int
+  public func stream_Status() -> Swift.Int
+  public func stream_Status(_times: Swift.UInt) -> Swift.Int
+  public func smartbattery_status(index: Swift.Int) -> Swift.String
+  public func fnFindFontWithName(_ givenFamilyName: Swift.String, bold: Swift.Bool, italic: Swift.Bool) -> Swift.String
+  public func fnBitsFromImage(_ image: UIKit.UIImage) -> Foundation.Data
+  public func windowsfont(_ x: Swift.Int, y: Swift.Int, height: Swift.Int, rotation: Swift.Int, style: Swift.Int, withUnderline: Swift.Int, fontName: Swift.String, content: Swift.String) -> Swift.Int
+  public func downloadpcx(_ srcPath: Swift.String, name: Swift.String) -> Swift.Int
+  public func sendBinaryData(_ data: Foundation.Data) -> Swift.Int
+  @objc deinit
+  @objc override dynamic public init()
+}
