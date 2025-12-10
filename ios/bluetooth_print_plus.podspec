@@ -16,18 +16,12 @@ A new Flutter project.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
+  s.static_framework = true
+  s.dependency 'Flutter'
   s.dependency 'GSDK', '0.0.7'
   s.platform = :ios, '11.0'
-  s.swift_version = '5.0'
-
-  # TSC MFI Framework
-  s.vendored_frameworks = 'Frameworks/tscswift.framework'
-  s.frameworks = 'ExternalAccessory'
+  s.static_framework = true
 
   # Flutter.framework does not contain a i386 slice.
-  s.pod_target_xcconfig = {
-    'DEFINES_MODULE' => 'YES',
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
-    'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/Flutter"'
-  }
+  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
 end
