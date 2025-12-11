@@ -70,7 +70,8 @@ class TscMfiChannel {
   /// [delay] - Optional delay in seconds after sending (default: 0)
   ///
   /// Returns true if command sent successfully
-  static Future<bool> sendCommandUtf8(String command, {double delay = 0}) async {
+  static Future<bool> sendCommandUtf8(String command,
+      {double delay = 0}) async {
     try {
       final result = await _channel.invokeMethod<bool>('sendcommand_utf8', {
         'command': command,
@@ -150,9 +151,7 @@ class TscMfiChannel {
       final result = await _channel.invokeMethod<List>('listAccessories');
       if (result == null) return [];
 
-      return result
-          .map((item) => Map<String, dynamic>.from(item))
-          .toList();
+      return result.map((item) => Map<String, dynamic>.from(item)).toList();
     } on PlatformException catch (e) {
       throw Exception('Failed to list accessories: ${e.message}');
     }
@@ -178,7 +177,8 @@ class TscMfiChannel {
   ///
   /// This uses the tscswift framework's printlabel() method
   /// which properly handles the print job execution
-  static Future<bool> printLabel({required int sets, required int copies}) async {
+  static Future<bool> printLabel(
+      {required int sets, required int copies}) async {
     try {
       final result = await _channel.invokeMethod<bool>('printLabel', {
         'sets': sets,
@@ -240,12 +240,18 @@ class TscMfiChannel {
   /// This method automatically:
   /// - Opens MFI port
   /// - Sends all commands
-  /// - Prints label
+  /// - Calls printlabel(sets, copies) to print
   /// - Closes port
-  static Future<bool> executePrintJob(String commands) async {
+  static Future<bool> executePrintJob(
+    String commands, {
+    int sets = 1,
+    int copies = 1,
+  }) async {
     try {
       final result = await _channel.invokeMethod<bool>('executePrintJob', {
         'commands': commands,
+        'sets': sets,
+        'copies': copies,
       });
       return result ?? false;
     } on PlatformException catch (e) {

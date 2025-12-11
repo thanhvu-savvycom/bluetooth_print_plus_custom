@@ -353,6 +353,10 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
             return
         }
 
+        // Get number of sets to print (default 1)
+        let sets = args["sets"] as? Int ?? 1
+        let copies = args["copies"] as? Int ?? 1
+
         // Create new Bluetooth instance if needed
         if tscBluetooth == nil {
             tscBluetooth = Bluetooth()
@@ -363,13 +367,13 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
         let _ = tscBluetooth!.openport_mfi()
         Thread.sleep(forTimeInterval: 1.0)
 
-        // Step 2: Send all commands at once
+        // Step 2: Send all commands at once (WITHOUT PRINT commands)
         print("Step 2: Sending commands batch...")
         let _ = tscBluetooth!.sendcommand(commands)
 
-        // Step 3: Print label
-        print("Step 3: Printing label...")
-        let _ = tscBluetooth!.printlabel(1, copies: 1)
+        // Step 3: Print label with specified sets and copies
+        print("Step 3: Printing label (sets=\(sets), copies=\(copies))...")
+        let _ = tscBluetooth!.printlabel(sets, copies: copies)
 
         // Step 4: Close port
         print("Step 4: Closing port...")
