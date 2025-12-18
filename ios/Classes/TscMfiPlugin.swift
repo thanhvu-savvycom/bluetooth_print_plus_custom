@@ -1,12 +1,16 @@
 import Flutter
 import UIKit
+#if !targetEnvironment(simulator)
 import tscswift
+#endif
 import ExternalAccessory
 
 /// Plugin to handle TSC printer MFI bluetooth connection on iOS
 /// This wraps the tscswift framework's Bluetooth class
 public class TscMfiPlugin: NSObject, FlutterPlugin {
+    #if !targetEnvironment(simulator)
     private var tscBluetooth: Bluetooth?
+    #endif
     private var methodChannel: FlutterMethodChannel?
 
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -83,6 +87,14 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
     }
 
     private func handleOpenPort(result: @escaping FlutterResult) {
+        #if targetEnvironment(simulator)
+        print("⚠️ TSC MFI not supported on simulator")
+        result(FlutterError(
+            code: "SIMULATOR_NOT_SUPPORTED",
+            message: "TSC printer is not supported on iOS simulator. Please use a real device.",
+            details: nil
+        ))
+        #else
         // Debug: List all available accessories
         let accessories = EAAccessoryManager.shared().connectedAccessories
         print("========== TSC MFI DEBUG ==========")
@@ -116,9 +128,17 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
         // Return success - if there were real connection issues, send commands would fail later
         print("TSC MFI connection completed")
         result(true)
+        #endif
     }
 
     private func handleClosePort(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        #if targetEnvironment(simulator)
+        result(FlutterError(
+            code: "SIMULATOR_NOT_SUPPORTED",
+            message: "TSC printer is not supported on iOS simulator.",
+            details: nil
+        ))
+        #else
         guard let bluetooth = tscBluetooth else {
             result(FlutterError(
                 code: "NOT_CONNECTED",
@@ -148,9 +168,17 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
                 details: nil
             ))
         }
+        #endif
     }
 
     private func handleSendCommand(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        #if targetEnvironment(simulator)
+        result(FlutterError(
+            code: "SIMULATOR_NOT_SUPPORTED",
+            message: "TSC printer is not supported on iOS simulator.",
+            details: nil
+        ))
+        #else
         print("📤 handleSendCommand called")
 
         guard let bluetooth = tscBluetooth else {
@@ -190,9 +218,17 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
 
         // Always return success - swift_sample doesn't check status
         result(true)
+        #endif
     }
 
     private func handleSendCommandUtf8(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        #if targetEnvironment(simulator)
+        result(FlutterError(
+            code: "SIMULATOR_NOT_SUPPORTED",
+            message: "TSC printer is not supported on iOS simulator.",
+            details: nil
+        ))
+        #else
         guard let bluetooth = tscBluetooth else {
             result(FlutterError(
                 code: "NOT_CONNECTED",
@@ -223,9 +259,17 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
 
         // Always return success
         result(true)
+        #endif
     }
 
     private func handleSendCommandWithData(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        #if targetEnvironment(simulator)
+        result(FlutterError(
+            code: "SIMULATOR_NOT_SUPPORTED",
+            message: "TSC printer is not supported on iOS simulator.",
+            details: nil
+        ))
+        #else
         guard let bluetooth = tscBluetooth else {
             result(FlutterError(
                 code: "NOT_CONNECTED",
@@ -256,9 +300,17 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
 
         // Always return success
         result(true)
+        #endif
     }
 
     private func handlePrinterStatus(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        #if targetEnvironment(simulator)
+        result(FlutterError(
+            code: "SIMULATOR_NOT_SUPPORTED",
+            message: "TSC printer is not supported on iOS simulator.",
+            details: nil
+        ))
+        #else
         guard let bluetooth = tscBluetooth else {
             result(FlutterError(
                 code: "NOT_CONNECTED",
@@ -279,14 +331,26 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
         }
 
         result(status)
+        #endif
     }
 
     private func handleIsConnected(result: @escaping FlutterResult) {
+        #if targetEnvironment(simulator)
+        result(false)
+        #else
         let isConnected = tscBluetooth != nil
         result(isConnected)
+        #endif
     }
 
     private func handleClearBuffer(result: @escaping FlutterResult) {
+        #if targetEnvironment(simulator)
+        result(FlutterError(
+            code: "SIMULATOR_NOT_SUPPORTED",
+            message: "TSC printer is not supported on iOS simulator.",
+            details: nil
+        ))
+        #else
         print("🧹 handleClearBuffer called")
 
         guard let bluetooth = tscBluetooth else {
@@ -302,9 +366,17 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
         bluetooth.clearBuffer()
         print("✅ Buffer cleared")
         result(true)
+        #endif
     }
 
     private func handlePrintLabel(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        #if targetEnvironment(simulator)
+        result(FlutterError(
+            code: "SIMULATOR_NOT_SUPPORTED",
+            message: "TSC printer is not supported on iOS simulator.",
+            details: nil
+        ))
+        #else
         print("🖨️ handlePrintLabel called")
 
         guard let bluetooth = tscBluetooth else {
@@ -336,11 +408,19 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
         print("✅ printlabel returned status: \(status)")
 
         result(true)
+        #endif
     }
 
     // Execute complete print job - exactly like swift_sample Send button
     // This does everything in one native call to avoid multiple method channel calls
     private func handleExecutePrintJob(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        #if targetEnvironment(simulator)
+        result(FlutterError(
+            code: "SIMULATOR_NOT_SUPPORTED",
+            message: "TSC printer is not supported on iOS simulator.",
+            details: nil
+        ))
+        #else
         print("🖨️ handleExecutePrintJob START")
 
         guard let args = call.arguments as? [String: Any],
@@ -383,5 +463,6 @@ public class TscMfiPlugin: NSObject, FlutterPlugin {
 
         print("✅ Print job completed")
         result(true)
+        #endif
     }
 }

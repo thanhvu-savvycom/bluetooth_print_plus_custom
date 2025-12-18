@@ -7,9 +7,30 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreBluetooth/CoreBluetooth.h>
+
+#if TARGET_OS_SIMULATOR
+// GSDK not available on simulator - define placeholders
+@class BLEConnecter;
+@class EthernetConnecter;
+@class Connecter;
+#ifndef CONNECT_STATE_DEFINED
+#define CONNECT_STATE_DEFINED
+typedef NS_ENUM(NSInteger, ConnectState) {
+    CONNECT_STATE_DISCONNECT = 0,
+    CONNECT_STATE_CONNECTING = 1,
+    CONNECT_STATE_CONNECTED = 2,
+    CONNECT_STATE_TIMEOUT = 3,
+    CONNECT_STATE_FAILT = 4
+};
+typedef void (^ConnectDeviceState)(ConnectState state);
+#endif
+typedef void (^UpdateState)(NSInteger state);
+#else
 #import "BLEConnecter.h"
 #import "EthernetConnecter.h"
 #import "Connecter.h"
+#endif
 
 /**
  *  @enum ConnectMethod

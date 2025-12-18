@@ -1,5 +1,8 @@
 #import "BluetoothPrintPlusPlugin.h"
 #import "ConnecterManager.h"
+
+#if !TARGET_OS_SIMULATOR
+// Only compile full implementation for real devices
 #import "EscCommand.h"
 #import "TscCommand.h"
 #import "TscCommandPlugin.h"
@@ -15,10 +18,10 @@
 #define WeakSelf(type) __weak typeof(type) weak##type = type
 
 typedef NS_ENUM(NSInteger, BPPState) {
-    BlueOn = 0,
-    BlueOff,
-    DeviceConnected,
-    DeviceDisconnected
+BlueOn = 0,
+        BlueOff,
+        DeviceConnected,
+        DeviceDisconnected
 };
 
 @interface BluetoothPrintPlusPlugin ()
@@ -34,10 +37,10 @@ typedef NS_ENUM(NSInteger, BPPState) {
 @implementation BluetoothPrintPlusPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FlutterMethodChannel* channel = [FlutterMethodChannel
-                                     methodChannelWithName:@"bluetooth_print_plus/methods"
-                                     binaryMessenger:[registrar messenger]];
+            methodChannelWithName:@"bluetooth_print_plus/methods"
+                  binaryMessenger:[registrar messenger]];
     BluetoothPrintPlusPlugin* instance = [[BluetoothPrintPlusPlugin alloc] init];
-    
+
     instance.channel = channel;
     FlutterEventChannel* stateChannel = [FlutterEventChannel eventChannelWithName:@"bluetooth_print_plus/state" binaryMessenger:[registrar messenger]];
     //STATE
@@ -45,22 +48,22 @@ typedef NS_ENUM(NSInteger, BPPState) {
     [stateChannel setStreamHandler:stateStreamHandler];
     instance.stateStreamHandler = stateStreamHandler;
     [registrar addMethodCallDelegate:instance channel:channel];
-    
+
     instance.scannedPeripherals = [NSMutableDictionary new];
-    
+
     FlutterMethodChannel *blueChannel = [FlutterMethodChannel methodChannelWithName:@"bluetooth_print_plus"
                                                                     binaryMessenger:[registrar messenger]];
     BluetoothPrintPlusPlugin *printPlus = [[BluetoothPrintPlusPlugin alloc] init];
     [registrar addMethodCallDelegate:printPlus channel:blueChannel];
-    
+
     FlutterMethodChannel *tscChannel = [FlutterMethodChannel methodChannelWithName:@"bluetooth_print_plus_tsc" binaryMessenger:[registrar messenger]];
     TscCommandPlugin *tsc = [[TscCommandPlugin alloc] init];
     [registrar addMethodCallDelegate:tsc channel:tscChannel];
-    
+
     FlutterMethodChannel *cpclChannel = [FlutterMethodChannel methodChannelWithName:@"bluetooth_print_plus_cpcl" binaryMessenger:[registrar messenger]];
     CpclCommandPlugin *cpcl = [CpclCommandPlugin new];
     [registrar addMethodCallDelegate:cpcl channel:cpclChannel];
-    
+
     FlutterMethodChannel *escChannel = [FlutterMethodChannel methodChannelWithName:@"bluetooth_print_plus_esc" binaryMessenger:[registrar messenger]];
     EscCommandPlugin *esc = [EscCommandPlugin new];
     [registrar addMethodCallDelegate:esc channel:escChannel];
@@ -119,7 +122,7 @@ typedef NS_ENUM(NSInteger, BPPState) {
                 [weakself updateConnectState:state];
             };
             [Manager connectPeripheral:peripheral options:nil timeout:2 connectBlack: self.state];
-            
+
             result(nil);
         } @catch(FlutterError *e) {
             result(e);
@@ -165,11 +168,11 @@ typedef NS_ENUM(NSInteger, BPPState) {
             [dict setValue:peripheral.name forKey:@"name"];
             [dict setValue:peripheral.identifier.UUIDString forKey:@"address"];
             [dict setValue:@(0) forKey:@"type"];
-            
+
             [weakself.channel invokeMethod:@"ScanResult" arguments:dict];
         }
     }];
-    
+
 }
 
 -(void)updateConnectState:(ConnectState)state {
@@ -211,3 +214,39 @@ typedef NS_ENUM(NSInteger, BPPState) {
 }
 
 @end
+
+#else
+// Simulator stub implementations
+@implementation BluetoothPrintPlusPlugin
++ (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+    FlutterMethodChannel* channel = [FlutterMethodChannel
+                                     methodChannelWithName:@"bluetooth_print_plus/methods"
+                                     binaryMessenger:[registrar messenger]];
+    BluetoothPrintPlusPlugin* instance = [[BluetoothPrintPlusPlugin alloc] init];
+    [registrar addMethodCallDelegate:instance channel:channel];
+
+    FlutterEventChannel* stateChannel = [FlutterEventChannel eventChannelWithName:@"bluetooth_print_plus/state" binaryMessenger:[registrar messenger]];
+    BluetoothPrintStreamHandler* stateStreamHandler = [[BluetoothPrintStreamHandler alloc] init];
+    [stateChannel setStreamHandler:stateStreamHandler];
+}
+
+- (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+    // All methods return not supported error on simulator
+    result([FlutterError errorWithCode:@"SIMULATOR_NOT_SUPPORTED"
+                               message:@"Bluetooth printer is not supported on iOS simulator. Please use a real device."
+                               details:nil]);
+}
+@end
+
+@implementation BluetoothPrintStreamHandler
+- (FlutterError*)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)eventSink {
+    self.sink = eventSink;
+    return nil;
+}
+
+- (FlutterError*)onCancelWithArguments:(id)arguments {
+    self.sink = nil;
+    return nil;
+}
+@end
+#endif

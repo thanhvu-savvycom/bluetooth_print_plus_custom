@@ -7,6 +7,9 @@
 //
 
 #import "ConnecterManager.h"
+
+#if !TARGET_OS_SIMULATOR
+// Only compile full implementation for real devices
 #define WeakSelf(type) __weak typeof(type) weak##type = type
 @interface ConnecterManager()
 @property(nonatomic,copy)ConnectDeviceState connecterState;
@@ -54,7 +57,7 @@ static dispatch_once_t once;
             [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"deviceDisconnect" object:nil userInfo:nil]];
             NSLog(@"发送通知。。。");
         }
-        
+
         switch (state) {
             case CONNECT_STATE_CONNECTED:
                 NSLog(@"连接成功");
@@ -185,3 +188,31 @@ static dispatch_once_t once;
 }
 
 @end
+
+#else
+// Simulator stub implementation - minimal placeholders
+@implementation ConnecterManager
+
++(instancetype)sharedInstance {
+    static ConnecterManager *manager;
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        manager = [[ConnecterManager alloc]init];
+    });
+    return manager;
+}
+
+// Stub methods - do nothing on simulator
+-(void)connectIP:(NSString *)ip port:(int)port connectState:(void (^)(ConnectState state))connectState callback:(void (^)(NSData *data))callback {}
+-(void)scanForPeripheralsWithServices:(nullable NSArray<CBUUID *> *)serviceUUIDs options:(nullable NSDictionary<NSString *, id> *)options discover:(void(^_Nullable)(CBPeripheral *_Nullable peripheral,NSDictionary<NSString *, id> *_Nullable advertisementData,NSNumber *_Nullable RSSI))discover {}
+-(void)didUpdateState:(void(^)(NSInteger state))state {}
+-(void)stopScan {}
+-(void)connectPeripheral:(CBPeripheral *)peripheral options:(nullable NSDictionary<NSString *,id> *)options timeout:(NSUInteger)timeout connectBlack:(void(^_Nullable)(ConnectState state)) connectState {}
+-(void)connectPeripheral:(CBPeripheral * _Nullable)peripheral options:(nullable NSDictionary<NSString *,id> *)options {}
+-(void)write:(NSData *_Nullable)data progress:(void(^_Nullable)(NSUInteger total,NSUInteger progress))progress receCallBack:(void (^_Nullable)(NSData *_Nullable))callBack {}
+-(void)write:(NSData *)data receCallBack:(void (^)(NSData *))callBack {}
+-(void)write:(NSData *)data {}
+-(void)close {}
+
+@end
+#endif
