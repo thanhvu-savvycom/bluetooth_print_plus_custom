@@ -57,7 +57,7 @@ static dispatch_once_t once;
             [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"deviceDisconnect" object:nil userInfo:nil]];
             NSLog(@"发送通知。。。");
         }
-
+        
         switch (state) {
             case CONNECT_STATE_CONNECTED:
                 NSLog(@"连接成功");

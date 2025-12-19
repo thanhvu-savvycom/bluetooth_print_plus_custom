@@ -18,10 +18,10 @@
 #define WeakSelf(type) __weak typeof(type) weak##type = type
 
 typedef NS_ENUM(NSInteger, BPPState) {
-BlueOn = 0,
-        BlueOff,
-        DeviceConnected,
-        DeviceDisconnected
+    BlueOn = 0,
+    BlueOff,
+    DeviceConnected,
+    DeviceDisconnected
 };
 
 @interface BluetoothPrintPlusPlugin ()
@@ -37,10 +37,10 @@ BlueOn = 0,
 @implementation BluetoothPrintPlusPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FlutterMethodChannel* channel = [FlutterMethodChannel
-            methodChannelWithName:@"bluetooth_print_plus/methods"
-                  binaryMessenger:[registrar messenger]];
+                                     methodChannelWithName:@"bluetooth_print_plus/methods"
+                                     binaryMessenger:[registrar messenger]];
     BluetoothPrintPlusPlugin* instance = [[BluetoothPrintPlusPlugin alloc] init];
-
+    
     instance.channel = channel;
     FlutterEventChannel* stateChannel = [FlutterEventChannel eventChannelWithName:@"bluetooth_print_plus/state" binaryMessenger:[registrar messenger]];
     //STATE
@@ -48,22 +48,22 @@ BlueOn = 0,
     [stateChannel setStreamHandler:stateStreamHandler];
     instance.stateStreamHandler = stateStreamHandler;
     [registrar addMethodCallDelegate:instance channel:channel];
-
+    
     instance.scannedPeripherals = [NSMutableDictionary new];
-
+    
     FlutterMethodChannel *blueChannel = [FlutterMethodChannel methodChannelWithName:@"bluetooth_print_plus"
                                                                     binaryMessenger:[registrar messenger]];
     BluetoothPrintPlusPlugin *printPlus = [[BluetoothPrintPlusPlugin alloc] init];
     [registrar addMethodCallDelegate:printPlus channel:blueChannel];
-
+    
     FlutterMethodChannel *tscChannel = [FlutterMethodChannel methodChannelWithName:@"bluetooth_print_plus_tsc" binaryMessenger:[registrar messenger]];
     TscCommandPlugin *tsc = [[TscCommandPlugin alloc] init];
     [registrar addMethodCallDelegate:tsc channel:tscChannel];
-
+    
     FlutterMethodChannel *cpclChannel = [FlutterMethodChannel methodChannelWithName:@"bluetooth_print_plus_cpcl" binaryMessenger:[registrar messenger]];
     CpclCommandPlugin *cpcl = [CpclCommandPlugin new];
     [registrar addMethodCallDelegate:cpcl channel:cpclChannel];
-
+    
     FlutterMethodChannel *escChannel = [FlutterMethodChannel methodChannelWithName:@"bluetooth_print_plus_esc" binaryMessenger:[registrar messenger]];
     EscCommandPlugin *esc = [EscCommandPlugin new];
     [registrar addMethodCallDelegate:esc channel:escChannel];
@@ -122,7 +122,7 @@ BlueOn = 0,
                 [weakself updateConnectState:state];
             };
             [Manager connectPeripheral:peripheral options:nil timeout:2 connectBlack: self.state];
-
+            
             result(nil);
         } @catch(FlutterError *e) {
             result(e);
@@ -168,11 +168,11 @@ BlueOn = 0,
             [dict setValue:peripheral.name forKey:@"name"];
             [dict setValue:peripheral.identifier.UUIDString forKey:@"address"];
             [dict setValue:@(0) forKey:@"type"];
-
+            
             [weakself.channel invokeMethod:@"ScanResult" arguments:dict];
         }
     }];
-
+    
 }
 
 -(void)updateConnectState:(ConnectState)state {
