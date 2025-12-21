@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <GSDK/BLEConnecter.h>
-#import <GSDK/EthernetConnecter.h>
-#import <GSDK/Connecter.h>
+#import "BLEConnecter.h"
+#import "EthernetConnecter.h"
+#import "Connecter.h"
 
 /**
  *  @enum ConnectMethod
