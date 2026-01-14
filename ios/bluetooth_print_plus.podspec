@@ -27,5 +27,13 @@ A new Flutter project.
   s.frameworks = 'ExternalAccessory'
 
   # Flutter.framework does not contain a i386 slice.
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+  s.pod_target_xcconfig = {
+    'DEFINES_MODULE' => 'YES',
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
+    'ENABLE_BITCODE' => 'NO',
+    'OTHER_LDFLAGS' => '-framework "tscswift"'
+  }
+  s.user_target_xcconfig = {
+    'ENABLE_BITCODE' => 'NO'
+  }
 end
