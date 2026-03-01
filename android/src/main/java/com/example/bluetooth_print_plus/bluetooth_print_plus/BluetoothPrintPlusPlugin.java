@@ -323,7 +323,11 @@ public class BluetoothPrintPlusPlugin
                     @Override
                     public void onSuccess(PrinterDevices printerDevices) {
                       // LogUtils.d(TAG, "onSuccess");
-                      sink.success(BPPState.DeviceConnected.getValue());
+                      if (sink != null) {
+                        sink.success(BPPState.DeviceConnected.getValue());
+                      } else {
+                        LogUtils.w(TAG, "EventSink is null, cannot send DeviceConnected event");
+                      }
                     }
 
                     @Override
@@ -340,8 +344,12 @@ public class BluetoothPrintPlusPlugin
 
                     @Override
                     public void onDisconnect() {
-                      // LogUtils.d(TAG, "onDisconnect");
-                      sink.success(BPPState.DeviceDisconnected.getValue());
+                      // Add null check to prevent crash
+                      if (sink != null) {
+                        sink.success(BPPState.DeviceDisconnected.getValue());
+                      } else {
+                        LogUtils.w(TAG, "EventSink is null, cannot send DeviceDisconnected event");
+                      }
                     }
                   })
                   .build();
@@ -354,7 +362,7 @@ public class BluetoothPrintPlusPlugin
   @SuppressWarnings("unchecked")
   private boolean write(byte[] data) throws IOException {
     boolean result = Printer.getPortManager().writeDataImmediately(data);
-    LogUtils.d(TAG, result ? "发送成功": "发送失败");
+    LogUtils.d(TAG, result ? "Write success" : "Write failed");
     return result;
   }
 
